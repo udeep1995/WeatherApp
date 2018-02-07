@@ -7,7 +7,10 @@ const OPEN_WEATHER_MAP_URL = 'https://api.openweathermap.org/data/2.5/weather?AP
      var requestUrl = `${OPEN_WEATHER_MAP_URL}&q=${encodedLocation}`;
 
     return axios.get(requestUrl).then((res)=>{
-       return res.data.main.temp;
+       return {
+         temp:res.data.main.temp,
+         desc:res.data.weather[0].description
+       }
      }).catch((err)=>{
         if(err){
           throw new Error(err)

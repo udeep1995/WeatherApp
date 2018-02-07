@@ -26287,12 +26287,14 @@ var Weather = React.createClass({
     this.setState({
       isLoading: true,
       location: undefined,
-      temp: undefined
+      temp: undefined,
+      desc: 'pleasant'
     });
-    openWeatherMap.getTemp(location).then(function (temp) {
+    openWeatherMap.getTemp(location).then(function (data) {
       _this.setState({
         location: location,
-        temp: temp,
+        temp: data.temp,
+        desc: data.desc,
         isLoading: false
       });
     }, function (err) {
@@ -26320,6 +26322,7 @@ var Weather = React.createClass({
     var _state = this.state,
         location = _state.location,
         temp = _state.temp,
+        desc = _state.desc,
         isLoading = _state.isLoading;
 
     function renderMessage() {
@@ -26329,8 +26332,8 @@ var Weather = React.createClass({
           { className: 'text-center' },
           'Fetching weather ...'
         );
-      } else if (temp && location) {
-        return React.createElement(WeatherMessage, { temp: temp, location: location });
+      } else if (temp && location && desc) {
+        return React.createElement(WeatherMessage, { temp: temp, location: location, desc: desc });
       }
     }
     return React.createElement(
@@ -26411,14 +26414,32 @@ var WeatherMessage = React.createClass({
   render: function render() {
     var temp = this.props.temp;
     var location = this.props.location;
-
+    var desc = this.props.desc;
     return React.createElement(
-      "h3",
-      { className: "text-center" },
-      "It is ",
-      temp,
-      " degree Celcius in ",
-      location
+      "div",
+      { className: "page-title" },
+      React.createElement(
+        "div",
+        null,
+        React.createElement(
+          "h3",
+          { className: "text-center" },
+          "It is ",
+          temp,
+          " degree Celcius in ",
+          location
+        )
+      ),
+      React.createElement(
+        "div",
+        null,
+        React.createElement(
+          "h4",
+          { className: "text-center" },
+          "Also, it's going to be ",
+          desc
+        )
+      )
     );
   }
 });
@@ -26441,7 +26462,10 @@ module.exports = {
     var requestUrl = OPEN_WEATHER_MAP_URL + '&q=' + encodedLocation;
 
     return axios.get(requestUrl).then(function (res) {
-      return res.data.main.temp;
+      return {
+        temp: res.data.main.temp,
+        desc: res.data.weather[0].description
+      };
     }).catch(function (err) {
       if (err) {
         throw new Error(err);
