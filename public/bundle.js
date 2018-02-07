@@ -26434,7 +26434,7 @@ module.exports = WeatherMessage;
 
 var axios = __webpack_require__(238);
 //q=London,uk&
-var OPEN_WEATHER_MAP_URL = 'http://api.openweathermap.org/data/2.5/weather?APPID=2b5b4b872f455ad5687ed78728f24ca8&units=metric';
+var OPEN_WEATHER_MAP_URL = 'https://api.openweathermap.org/data/2.5/weather?APPID=2b5b4b872f455ad5687ed78728f24ca8&units=metric';
 module.exports = {
   getTemp: function getTemp(location) {
     var encodedLocation = encodeURIComponent(location);
